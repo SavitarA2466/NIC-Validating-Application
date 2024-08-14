@@ -1,0 +1,44 @@
+@keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeOutUp {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+  }
+  
+  .animate__animated.animate__fadeInUp {
+    animation-name: fadeInUp;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+  }
+  
+  .animate__animated.animate__fadeOutUp {
+    animation-name: fadeOutUp;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+  }
+  
+  .animate__faster {
+    animation-duration: 0.5s !important;
+    animation-timing-function: linear !important;
+  }
+
+  .custom-button {
+    background-color: #2c91ad; /* OK button's colour */
+    color: white;
+    border: none;
+  }
