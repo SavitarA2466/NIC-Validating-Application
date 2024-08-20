@@ -8,7 +8,6 @@ import Validator from "./pages/validator";
 import Management from "./pages/management";
 import Header from "./pages/header";
 import ForgetPassword from './pages/forgetPassword';
-import ProtectedRoute from './pages/protectedRoute';
 
 function App() {
   return (
@@ -16,43 +15,37 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={
-            <div className="flex min-h-screen bg-gray-200">
+            <div className="text-black hover:text-black font-bold text-sm">
               <Login />
             </div>
           } />
           <Route path="/signup" element={
-            <div className="flex min-h-screen bg-gray-200">
+            <div className="text-black hover:text-black font-bold text-sm">
               <Signup />
             </div>
           } />
           <Route path="/forgetpassword" element={
-            <div className="flex min-h-screen bg-gray-200">
+            <div className="text-black hover:text-black font-bold text-sm">
               <ForgetPassword />
             </div>
           } />
           <Route path="/dashboard" element={
-            // <ProtectedRoute>
-              <div className="min-h-screen bg-gray-200">
+              <div className="text-black hover:text-black font-bold text-sm">
                 <Header title="Dashboard" />
                 <Dashboard />
               </div>
-            // </ProtectedRoute>
           } />
           <Route path="/validator" element={
-            // <ProtectedRoute>
-              <div className="min-h-screen bg-gray-200">
+            <div className="text-black hover:text-black font-bold text-sm">
                 <Header title="NIC Validator" />
                 <Validator />
               </div>
-            // </ProtectedRoute>
           } />
           <Route path="/management" element={
-            // <ProtectedRoute>
-              <div className="min-h-screen bg-gray-200">
-                <Header title="Reporting" />
+            <div className="text-black hover:text-black font-bold text-sm">
+                <Header title="Reports" />
                 <Management />
               </div>
-            // </ProtectedRoute>
           } />
         </Routes>
         <Helmet>

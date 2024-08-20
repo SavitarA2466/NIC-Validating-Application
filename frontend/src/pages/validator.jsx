@@ -5,9 +5,9 @@ import 'tailwindcss/tailwind.css';
 
 function Validator() {
   const [files, setFiles] = useState([]);
-  const [validationResults, setValidationResults] = useState(null); // State for validation results
+  const [validationResults, setValidationResults] = useState(null);
   const [error, setError] = useState(null);
-  const [showNoDataMessage, setShowNoDataMessage] = useState(true); // State to show "No files selected yet" message
+  const [showNoDataMessage, setShowNoDataMessage] = useState(true);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: (acceptedFiles) => {
@@ -17,7 +17,7 @@ function Validator() {
       }
       setFiles(acceptedFiles);
       setError(null);
-      setShowNoDataMessage(false); // hide message and svg icon
+      setShowNoDataMessage(false);
     },
     accept: '.csv',
   });
@@ -40,51 +40,49 @@ function Validator() {
         },
       });
       setValidationResults(response.data.data);
-      setError(null); // Clear any previous errors
+      setError(null);
     } catch (err) {
-      setError('Failed to validate NICs'); // Set error message if validation fails
+      setError('Failed to validate NICs');
     }
   };
 
   useEffect(() => {
     if (validationResults) {
-      setShowNoDataMessage(false); // Hide message when results are available
+      setShowNoDataMessage(false);
     }
   }, [validationResults]);
 
   return (
-    <div className="container mx-auto p-6 pt-28 px-8 flex-grow">
+    <div className="container mx-auto p-6 pt-28 px-8 flex-grow bg-gradient-to-r from-blue-50 to-green-50 min-h-screen">
+      <div className="flex flex-col items-center gap-6 mb-8">
+        <div
+          {...getRootProps()}
+          className={`w-full md:w-2/3 lg:w-1/2 border-4 border-dashed p-8 rounded-lg shadow-lg transition duration-300 ease-in-out transform ${
+            isDragActive ? 'bg-blue-100 border-blue-600 scale-105' : 'bg-white border-gray-300'
+          }`}
+        >
+          <input {...getInputProps()} />
+          <p className="text-lg font-medium text-center">
+            {isDragActive ? 'Drop the files here...' : 'Drag & Drop your CSV files here'}
+          </p>
+        </div>
 
-<div className="flex flex-col items-center gap-4 mb-6">
-  <div
-    {...getRootProps()}
-    className={`w-full md:w-2/3 lg:w-1/2 border-2 border-dashed p-6 rounded-lg shadow-lg transition duration-300 ease-in-out ${
-      isDragActive ? 'bg-gray-100 border-blue-500' : 'bg-white border-gray-300'
-    }`}
-  >
-    <input {...getInputProps()} />
-    <p className="text-lg font-semibold text-center">
-      {isDragActive ? 'Drop the files here...' : 'Drag & Drop'}
-    </p>
-  </div>
-
-  <button 
-    type="button" 
-    onClick={handleValidate}
-    className="w-full md:w-2/3 lg:w-1/2 px-6 py-3 h-16 mt-4 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-  >
-    Validate
-  </button>
-</div>
-
+        <button 
+          type="button" 
+          onClick={handleValidate}
+          className="w-full md:w-2/3 lg:w-1/2 px-6 py-3 h-16 mt-4 text-base font-semibold text-center text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300"
+        >
+          Validate
+        </button>
+      </div>
 
       <div className="mb-6">
         {files.length > 0 && (
-          <div className="bg-white p-4 rounded-lg shadow-lg">
-            <h3 className="text-xl font-bold mb-4">Selected Files:</h3>
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h3 className="text-xl font-semibold mb-4 text-indigo-600">Selected Files:</h3>
             <ul className="list-disc pl-5">
               {Array.from(files).map((file, index) => (
-                <li key={index} className="mb-2">
+                <li key={index} className="mb-2 text-gray-700">
                   {file.name} ({(file.size / 1024).toFixed(2)} KB)
                 </li>
               ))}
@@ -99,22 +97,33 @@ function Validator() {
         </div>
       )}
 
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {error && <p className="text-red-500 text-center font-medium">{error}</p>}
 
       {validationResults && (
-        <div className="bg-white p-4 rounded-lg shadow-lg mt-6">
-          <h3 className="text-xl font-bold mb-4">Validation Results:</h3>
-          <ul className="list-disc pl-5">
-            {validationResults.map((result, index) => (
-              <li key={index} className="mb-2">
-                <span className="font-semibold">NIC:</span> {result.nic_number}, 
-                <span className="font-semibold"> Birthday:</span> {result.birthday}, 
-                <span className="font-semibold"> Age:</span> {result.age}, 
-                <span className="font-semibold"> Gender:</span> {result.gender}, 
-                <span className="font-semibold"> File:</span> {result.file_name}
-              </li>
-            ))}
-          </ul>
+        <div className="bg-white p-6 rounded-lg shadow-lg mt-6 overflow-x-auto">
+          <h3 className="text-xl font-semibold mb-4 text-green-600">Validation Results:</h3>
+          <table className="table-auto w-full text-left border-collapse">
+            <thead>
+              <tr>
+                <th className="border-b-2 border-gray-200 p-2">NIC</th>
+                <th className="border-b-2 border-gray-200 p-2">Birthday</th>
+                <th className="border-b-2 border-gray-200 p-2">Age</th>
+                <th className="border-b-2 border-gray-200 p-2">Gender</th>
+                <th className="border-b-2 border-gray-200 p-2">File</th>
+              </tr>
+            </thead>
+            <tbody>
+              {validationResults.map((result, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="border-b border-gray-200 p-2">{result.nic_number}</td>
+                  <td className="border-b border-gray-200 p-2">{result.birthday}</td>
+                  <td className="border-b border-gray-200 p-2">{result.age}</td>
+                  <td className="border-b border-gray-200 p-2">{result.gender}</td>
+                  <td className="border-b border-gray-200 p-2">{result.file_name}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
@@ -122,3 +131,4 @@ function Validator() {
 }
 
 export default Validator;
+

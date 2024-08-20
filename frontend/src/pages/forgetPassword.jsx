@@ -3,10 +3,11 @@ import Modal from 'react-modal';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import 'tailwindcss/tailwind.css';
 
-axios.defaults.baseURL = 'http://localhost:3001/auth'; 
+axios.defaults.baseURL = 'http://localhost:3001/auth';
 
-Modal.setAppElement('#root'); // Ensure accessibility by specifying the root element
+Modal.setAppElement('#root');
 
 function Forgot() {
     const [email, setEmail] = useState('');
@@ -15,34 +16,31 @@ function Forgot() {
     const [emailSubmitted, setEmailSubmitted] = useState(false);
     const [isOtpVerified, setIsOtpVerified] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const handleEmailSubmit = async () => {
         try {
-            
             const response = await axios.post('/send-otp', { email });
             if (response.status === 200) {
                 setEmailSubmitted(true);
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
+                    title: 'Error',
                     text: 'Failed to send OTP',
                 });
             }
         } catch (error) {
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
+                title: 'Error',
                 text: 'Error sending OTP',
             });
         }
     };
 
-    // Handle OTP verification
     const handleVerifyOtp = async () => {
         try {
-            
             const response = await axios.post('/verify-otp', { email, otp });
             if (response.status === 200) {
                 setIsOtpVerified(true);
@@ -57,16 +55,14 @@ function Forgot() {
         } catch (error) {
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
+                title: 'Error',
                 text: 'Error verifying OTP',
             });
         }
     };
 
-    // Handle password change
     const handleChangePassword = async () => {
         try {
-            
             const response = await axios.post('/change-password', { email, newPassword });
             if (response.status === 200) {
                 handleCloseModal();
@@ -75,83 +71,78 @@ function Forgot() {
                     title: 'Success',
                     text: 'Password changed successfully',
                 }).then(() => {
-                    navigate('/'); 
+                    navigate('/');
                 });
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
+                    title: 'Error',
                     text: 'Failed to change password',
                 });
             }
         } catch (error) {
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
+                title: 'Error',
                 text: 'Error changing password',
             });
         }
     };
 
-    // Open the password change modal
     const handleOpenModal = () => {
         setIsModalOpen(true);
     };
 
-    // Close the password change modal
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        setNewPassword(''); 
+        setNewPassword('');
     };
 
     return (
-        <div className="flex justify-center items-center h-screen bg-light-cyan-50 ml-auto mr-auto">
-            <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
-                <div className="text-center mb-8">
-                    <h2 className="text-2xl font-semibold text-gray-800">Forgot your password?</h2>
-                </div>
+        <div className="forgot-container">
+            <div className="forgot-form">
+                <h2 className="title">Forgot your password?</h2>
+                <p className="subtitle">Enter your email to receive an OTP for password reset.</p>
 
                 <form>
-                    <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                            Email
-                        </label>
+                    <div className="input-group">
+                        <label htmlFor="email" className="label">Email</label>
                         <input
                             id="email"
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                            className="input-field"
+                            placeholder="Enter your email"
                         />
                     </div>
 
                     <button
                         type="button"
                         onClick={handleEmailSubmit}
-                        className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        className="btn-primary"
                     >
                         Continue
                     </button>
 
                     {emailSubmitted && !isOtpVerified && (
                         <>
-                            <div className="mt-4">
-                                <label className="block text-sm font-medium leading-6 text-gray-900" htmlFor="otp">
-                                    Enter OTP
-                                </label>
+                            <div className="input-group mt-4">
+                                <label htmlFor="otp" className="label">Enter OTP</label>
                                 <input
                                     id="otp"
                                     type="text"
                                     value={otp}
                                     onChange={(e) => setOtp(e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                                    className="input-field"
+                                    placeholder="Enter the OTP sent to your email"
                                 />
                             </div>
 
                             <button
                                 type="button"
                                 onClick={handleVerifyOtp}
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                className="btn-primary mt-4"
                             >
                                 Verify OTP
                             </button>
@@ -162,26 +153,25 @@ function Forgot() {
                 <Modal
                     isOpen={isModalOpen}
                     onRequestClose={handleCloseModal}
-                    className="bg-white p-8 shadow-lg rounded-lg max-w-md mx-auto my-20 outline-none"
-                    overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+                    className="modal"
+                    overlayClassName="modal-overlay"
                 >
-                    <h2 className="text-2xl font-semibold text-gray-800 mb-6">Change Password</h2>
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium leading-6 text-gray-900" htmlFor="newPassword">
-                            New Password
-                        </label>
+                    <h2 className="modal-title">Change Password</h2>
+                    <div className="input-group mb-4">
+                        <label htmlFor="newPassword" className="label">New Password</label>
                         <input
                             id="newPassword"
                             type="password"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                            className="input-field"
+                            placeholder="Enter your new password"
                         />
                     </div>
                     <button
                         type="button"
                         onClick={handleChangePassword}
-                        className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        className="btn-primary"
                     >
                         Confirm
                     </button>
@@ -192,5 +182,6 @@ function Forgot() {
 }
 
 export default Forgot;
+
 
 
