@@ -74,10 +74,9 @@ npm start
 Open your browser and navigate to `http://localhost:3000`.
 
 
-
+---
 
 Let’s make NIC validation smarter and faster! 💡
 
 ---
 
-This enhanced version makes the README more engaging and visually appealing while still being informative. 
