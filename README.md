@@ -65,11 +65,11 @@ cd nic-validating-application
 cd nic-validation-service
 npm install
 
-cd nic-validation-service
+cd user-service
 npm install
 
 # Frontend
-cd ../frontend
+cd frontend
 npm install
 ```
 
@@ -77,11 +77,14 @@ npm install
 
 ```bash
 # Start the backend service
-cd backend
+cd nic-validation-service
+npm start
+
+cd user-service
 npm start
 
 # Start the frontend
-cd ../frontend
+cd frontend
 npm start
 ```
 
