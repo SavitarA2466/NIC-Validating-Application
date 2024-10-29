@@ -62,7 +62,10 @@ cd nic-validating-application
 
 ```bash
 # Backend
-cd backend
+cd nic-validation-service
+npm install
+
+cd nic-validation-service
 npm install
 
 # Frontend
